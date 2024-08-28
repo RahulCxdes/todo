@@ -5,8 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "nodemon indesx.js",
-    "build": "npm"
+    "dev": "nodemon index.js",
+    "build": "echo 'No build step required'"
   },
   "keywords": [],
   "author": "",
