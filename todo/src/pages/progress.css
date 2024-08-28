@@ -1,0 +1,27 @@
+/* Add this CSS to your styles or Tailwind configuration */
+.progress-bar-container {
+    position: relative;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .progress-bar {
+    position: relative;
+    flex-grow: 1;
+    background-color: #e2e8f0; /* Light gray color for the background */
+    border-radius: 9999px; /* Fully rounded corners */
+    height: 32px; /* Height of the progress bar */
+    overflow: hidden;
+  }
+  
+  .progress-bar-fill {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    background-color: #3b82f6; /* Blue color for the progress */
+    border-radius: 9999px;
+  }
+  
