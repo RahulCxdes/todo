@@ -11,7 +11,7 @@ const Profile = () => {
 
   const updateLeaderboard = async (username, totalXP) => {
     try {
-      await axios.post('http://localhost:5000/api/leaderboard/update', {
+      await axios.post('https://todo-8.onrender.com/api/leaderboard/update', {
         username,
         totalXP,
       });
@@ -23,7 +23,7 @@ const Profile = () => {
   useEffect(() => {
     const fetchStopwatchData = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/api/stopwatches/all', {
+        const response = await axios.get('https://todo-8.onrender.com/api/stopwatches/all', {
           params: { username }
         });
         setStopwatches(response.data.stopwatches);
