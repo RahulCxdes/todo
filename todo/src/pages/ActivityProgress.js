@@ -16,7 +16,7 @@ const ActivityProgress = () => {
 
     const fetchActivities = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/api/activities/activities', {
+        const response = await axios.get('https://todo-8.onrender.com/api/activities/activities', {
           params: { username },
         });
         const updatedActivities = response.data.map(activity => ({
@@ -47,7 +47,7 @@ const ActivityProgress = () => {
 
   const handleDelete = async (activityId) => {
     try {
-      await axios.delete(`http://localhost:5000/api/activities/${activityId}`);
+      await axios.delete(`https://todo-8.onrender.com/api/activities/${activityId}`);
       setActivities(activities.filter(activity => activity._id !== activityId));
     } catch (error) {
       console.error('Error deleting activity:', error);
