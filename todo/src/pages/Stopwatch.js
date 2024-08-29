@@ -31,7 +31,7 @@ const Stopwatch = ({ activityId, onStop }) => {
 
   const updateXP = async (minutes) => {
     try {
-      await axios.post('http://localhost:5000/api/stopwatches/update-time', {
+      await axios.post('https://todo-8.onrender.com/api/stopwatches/update-time', {
         activityId,
         time: minutes,
         username,
