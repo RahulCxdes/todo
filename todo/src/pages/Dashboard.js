@@ -14,7 +14,7 @@ const Dashboard = () => {
 
     try {
       // POST request to add the activity
-      const response = await axios.post('http://localhost:5000/api/activities/add-activity', {
+      const response = await axios.post('https://todo-8.onrender.com/api/activities/add-activity', {
         activityName,
         totalDays: parseInt(totalDays),
         username,
