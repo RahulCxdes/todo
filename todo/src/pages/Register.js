@@ -9,6 +9,7 @@ const Register = () => {
     age: '',
     gender: ''
   });
+  const [error, setError] = useState('');
   const navigate = useNavigate(); // Use this for navigation
 
   const handleChange = (e) => {
@@ -17,33 +18,46 @@ const Register = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+  
     try {
-      const response = await fetch('http://localhost:5000/api/users/register', {
+      const response = await fetch('https://todo-8.onrender.com/api/users/register', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(formData),
       });
-
-      const data = await response.json();
-      if (response.ok) {
-        // Redirect to the Dashboard
-        navigate('/dashboard');
+  
+      console.log('Response:', response);
+  
+      const contentType = response.headers.get('Content-Type');
+      if (contentType && contentType.includes('application/json')) {
+        const data = await response.json();
+        if (response.ok) {
+          navigate('/dashboard');
+        } else {
+          console.error('Error response data:', data);
+          alert(data.message || 'An unexpected error occurred');
+        }
       } else {
-        alert(data.message);
+        const text = await response.text();
+        console.error('Non-JSON response text:', text);
+        alert('Received non-JSON response from server');
       }
     } catch (error) {
+      console.error('Error registering user:', error);
       alert('Error registering user');
     }
   };
+  
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-blue-500 to-indigo-600">
       <div className="bg-white shadow-lg rounded-lg p-8 max-w-md w-full">
         <h2 className="text-3xl font-bold text-center mb-6 text-gray-800">Create an Account</h2>
         
+        {error && <p className="text-red-600 text-center mb-4">{error}</p>}
+
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
             <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="username">
