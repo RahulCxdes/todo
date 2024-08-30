@@ -1,7 +1,8 @@
 import React, { useContext, useEffect, useState } from 'react';
 import axios from 'axios';
 import { AuthContext } from '../App';
-import ProgressBar from './ProgressBar'; // Import the ProgressBar component
+// import ProgressBar from './ProgressBar'; // Import the ProgressBar component
+import './Profile.css'; // Import the CSS file
 
 const Profile = () => {
   const { username } = useContext(AuthContext);
@@ -46,33 +47,32 @@ const Profile = () => {
   }, [username, totalXP]);
 
   return (
-    <div className="min-h-screen bg-gradient-to-r from-gray-100 to-gray-300 p-8">
+    <div className="profile-container">
       
-      <h2 className="text-2xl font-bold text-center mb-4 text-indigo-600">Welcome, {username}!</h2>
+      <h2 className="profile-welcome">Welcome, {username}!</h2>
       {error && (
-        <p className="text-red-500 text-center mb-6">{error}</p>
+        <p className="profile-error">{error}</p>
       )}
-      <div className="max-w-4xl mx-auto bg-white p-6 rounded-lg shadow-lg border border-gray-300">
-        <div className="text-center mb-6">
-          <p className="text-2xl font-semibold text-gray-700">
-            Total XP Earned: 
-            <span className="text-3xl font-bold text-blue-600"> {totalXP}</span>
+      <div className="profile-content">
+        <div className="xp-info">
+          <p>Total XP Earned: 
+            <span className="xp-value"> {totalXP}</span>
           </p>
         </div>
-        <ProgressBar xp={totalXP} />
-        <div className="mt-8">
-          <h2 className="text-3xl font-semibold mb-4 text-gray-800">Activity Details</h2>
+      
+        <div className="activity-details">
+          <h2 className="details-title">Activity Details</h2>
           {stopwatches.length > 0 ? (
-            <ul className="list-none space-y-4">
+            <ul className="stopwatch-list">
               {stopwatches.map(stopwatch => (
-                <li key={stopwatch._id} className="bg-gray-100 p-4 rounded-lg shadow-md hover:bg-gray-200 transition-colors">
-                  <h3 className="text-xl font-semibold text-gray-800">{stopwatch.activityName}</h3>
-                  <p className="text-lg font-medium text-gray-600">XP Earned: {stopwatch.minutes}</p>
+                <li key={stopwatch._id} className="stopwatch-item">
+                  <h3 className="activity-name">{stopwatch.activityName}</h3>
+                  <p className="xp-earned">XP Earned: {stopwatch.minutes}</p>
                 </li>
               ))}
             </ul>
           ) : (
-            <p className="text-gray-600 text-center">No stopwatch data available.</p>
+            <p className="no-data">No stopwatch data available.</p>
           )}
         </div>
       </div>
