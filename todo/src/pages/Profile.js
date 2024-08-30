@@ -47,7 +47,7 @@ const Profile = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-r from-gray-100 to-gray-300 p-8">
-      <h1 className="text-4xl font-extrabold text-center text-indigo-700 mb-6">Profile</h1>
+      
       <h2 className="text-2xl font-bold text-center mb-4 text-indigo-600">Welcome, {username}!</h2>
       {error && (
         <p className="text-red-500 text-center mb-6">{error}</p>
