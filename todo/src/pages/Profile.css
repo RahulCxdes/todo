@@ -1,0 +1,104 @@
+/* Profile.css */
+
+.profile-container {
+    margin-top: 4%;
+    min-height: 100vh;
+    background: linear-gradient(to right, #de2121, #e3e4e8);
+    padding: 2rem;
+  }
+  
+  .profile-title {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: #e1e8d7;
+    text-align: center;
+    margin-bottom: 1.5rem;
+  }
+  
+  .profile-welcome {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #883a3a;
+    text-align: center;
+    margin-bottom: 1rem;
+  }
+  
+  .profile-error {
+    color: #d9534f;
+    text-align: center;
+    margin-bottom: 1rem;
+  }
+  
+  .profile-content {
+    max-width: 800px;
+    margin: 0 auto;
+    background: #c9c7c7;
+    padding: 1.5rem;
+    border-radius: 0.5rem;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border: 1px solid #dcdcdc;
+    position: relative;
+  }
+  
+  .xp-info {
+    text-align: center;
+    margin-bottom: 1.5rem;
+  }
+  
+  .xp-value {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #689dd6;
+  }
+  
+  .progress-bar-container {
+    position: relative;
+    margin-bottom: 2rem;
+  }
+  
+  .activity-details {
+    margin-top: 2rem;
+  }
+  
+  .details-title {
+    font-size: 1.75rem;
+    font-weight: bold;
+    color: #934040;
+    margin-bottom: 1rem;
+  }
+  
+  .stopwatch-list {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .stopwatch-item {
+    background: #f1f1f1;
+    padding: 1rem;
+    border-radius: 0.25rem;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    margin-bottom: 1rem;
+    transition: background 0.3s;
+  }
+  
+  .stopwatch-item:hover {
+    background: #e1e1e1;
+  }
+  
+  .activity-name {
+    font-size: 1.25rem;
+    font-weight: bold;
+    color: #e32424;
+  }
+  
+  .xp-earned {
+    font-size: 1rem;
+    color: #555;
+  }
+  
+  .no-data {
+    color: #555;
+    text-align: center;
+  }
+  
