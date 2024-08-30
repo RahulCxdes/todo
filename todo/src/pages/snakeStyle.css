@@ -1,86 +1,159 @@
-/* snakeStyles.css */
+/* General container styling */
+.dashboard-container {
+  min-height: 100vh;
+  padding: 20px;
+  background-color: #242525; /* Light gray background */
+}
 
-/* General Styles */
-.min-h-screen {
-    min-height: 100vh;
-  }
+/* Flexbox container for rules and image */
+.box-container {
+  margin-top: 4%;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 20px; /* Add space between items */
+}
+
+/* Styling for the rules box */
+.rules-box {
+  flex: 1;
+  background-color: #e9ecee; /* White background */
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(169, 205, 10, 0.2); /* Slightly darker shadow */
+}
+
+.rules-heading {
+  font-size: 24px;
+  font-weight: bold;
+  color: #cc1e1e; /* Darker gray color */
+  margin-bottom: 15px;
+}
+
+.rules-list {
+  list-style-type: disc;
+  padding-left: 20px;
   
-  .bg-custom {
-    background-color: #f0f8ff;
-  }
-  
-  /* Box Styles */
+}
+
+.rules-list li {
+  font-size: 18px;
+  color: #a91212; /* Slightly lighter gray color */
+  margin-bottom: 10px;
+}
+
+/* Styling for the image */
+.image-container {
+  flex: 1;
+  max-width: 100%;
+  display: flex;
+  justify-content: center; /* Center the image */
+}
+
+.tracker-image {
+  width: 100%;
+  height: auto;
+  max-width: 400px; /* Max width for larger screens */
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Slightly darker shadow */
+}
+
+/* Activity form styling */
+.activity-form {
+  margin-top: 40px;
+  background-color:  #e9ecee; /* White background */
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Slightly darker shadow */
+}
+
+.form-heading {
+  font-size: 24px;
+  font-weight: bold;
+  color: #333; /* Darker gray color */
+  margin-bottom: 20px;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-label {
+  display: block;
+  font-size: 18px;
+  font-weight: bold;
+  color: #555; /* Slightly lighter gray color */
+  margin-bottom: 8px;
+}
+
+.form-input {
+  padding: 10px;
+  font-size: 16px;
+  width: 100%;
+  border: 1px solid #ddd; /* Light gray border */
+  border-radius: 5px;
+}
+
+.form-button {
+  background-color: #007bff; /* Bright blue color */
+  color: #ffffff;
+  padding: 10px;
+  font-size: 18px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.form-button:hover {
+  background-color: #0056b3; /* Darker blue on hover */
+}
+
+/* Success message styling */
+.success-message {
+  font-size: 16px;
+  color: #28a745; /* Green color for success */
+  text-align: center;
+  margin-top: 10px;
+}
+
+/* Media query for mobile screens */
+@media (max-width: 768px) {
   .box-container {
-    position: relative;
-    width: 80%;
-    max-width: 800px;
-    margin: 0 auto;
-    padding: 20px;
-    background: white;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-    overflow: hidden;
+    flex-direction: column;
+    align-items: center;
   }
-  
+
   .rules-box {
-    position: relative;
-    padding: 20px;
-    border-radius: 8px;
-    background-color: #ffffff;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-    z-index: 1;
-  }
-  
-  /* Snake Animation */
-  .snake-container {
-    position: absolute;
-    top: 0;
-    left: 0;
     width: 100%;
-    height: 100%;
-    z-index: 0;
-    pointer-events: none;
+    margin-bottom: 20px;
   }
-  
-  .snake {
-    position: absolute;
+
+  .image-container {
     width: 100%;
-    height: 100%;
-    background: transparent;
+    margin-bottom: 20px;
   }
-  
-  .snake svg {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
+
+  .tracker-image {
+    width: 80%;
+    max-width: 300px; /* Adjust max width for smaller screens */
   }
-  
-  .snake path {
-    stroke-linecap: round;
-    stroke-linejoin: round;
-    fill: none;
-    stroke-width: 5;
-    stroke: #ff5722;
-    stroke-dasharray: 200;
-    stroke-dashoffset: 0;
-    animation: snake-animation 10s linear infinite;
+
+  .form-heading {
+    font-size: 20px;
   }
-  
-  @keyframes snake-animation {
-    0% {
-      stroke-dashoffset: 0;
-    }
-    100% {
-      stroke-dashoffset: -200;
-    }
+
+  .form-label {
+    font-size: 16px;
   }
-  
-  /* Responsive Styles */
-  @media (max-width: 600px) {
-    .box-container {
-      width: 90%;
-    }
+
+  .form-input {
+    font-size: 14px;
   }
-  
+
+  .form-button {
+    font-size: 16px;
+    padding: 8px;
+  }
+}
