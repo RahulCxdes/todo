@@ -1,104 +1,83 @@
-/* Profile.css */
+import React, { useContext, useEffect, useState } from 'react';
+import axios from 'axios';
+import { AuthContext } from '../App';
+// import ProgressBar from './ProgressBar'; // Import the ProgressBar component
+import './Profile.css'; // Import the CSS file
 
-.profile-container {
-    margin-top: 4%;
-    min-height: 100vh;
-    background: linear-gradient(to right, #de2121, #e3e4e8);
-    padding: 2rem;
-  }
-  
-  .profile-title {
-    font-size: 2.5rem;
-    font-weight: bold;
-    color: #e1e8d7;
-    text-align: center;
-    margin-bottom: 1.5rem;
-  }
-  
-  .profile-welcome {
-    font-size: 1.5rem;
-    font-weight: bold;
-    color: #883a3a;
-    text-align: center;
-    margin-bottom: 1rem;
-  }
-  
-  .profile-error {
-    color: #d9534f;
-    text-align: center;
-    margin-bottom: 1rem;
-  }
-  
-  .profile-content {
-    max-width: 800px;
-    margin: 0 auto;
-    background: #c9c7c7;
-    padding: 1.5rem;
-    border-radius: 0.5rem;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    border: 1px solid #dcdcdc;
-    position: relative;
-  }
-  
-  .xp-info {
-    text-align: center;
-    margin-bottom: 1.5rem;
-  }
-  
-  .xp-value {
-    font-size: 2rem;
-    font-weight: bold;
-    color: #689dd6;
-  }
-  
-  .progress-bar-container {
-    position: relative;
-    margin-bottom: 2rem;
-  }
-  
-  .activity-details {
-    margin-top: 2rem;
-  }
-  
-  .details-title {
-    font-size: 1.75rem;
-    font-weight: bold;
-    color: #934040;
-    margin-bottom: 1rem;
-  }
-  
-  .stopwatch-list {
-    list-style-type: none;
-    padding: 0;
-    margin: 0;
-  }
-  
-  .stopwatch-item {
-    background: #f1f1f1;
-    padding: 1rem;
-    border-radius: 0.25rem;
-    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
-    margin-bottom: 1rem;
-    transition: background 0.3s;
-  }
-  
-  .stopwatch-item:hover {
-    background: #e1e1e1;
-  }
-  
-  .activity-name {
-    font-size: 1.25rem;
-    font-weight: bold;
-    color: #e32424;
-  }
-  
-  .xp-earned {
-    font-size: 1rem;
-    color: #555;
-  }
-  
-  .no-data {
-    color: #555;
-    text-align: center;
-  }
-  
+const Profile = () => {
+  const { username } = useContext(AuthContext);
+  const [stopwatches, setStopwatches] = useState([]);
+  const [totalXP, setTotalXP] = useState(0);
+  const [error, setError] = useState(null);
+
+  const updateLeaderboard = async (username, totalXP) => {
+    try {
+      await axios.post('https://todo-8.onrender.com/api/leaderboard/update', {
+        username,
+        totalXP,
+      });
+    } catch (error) {
+      console.error('Error updating leaderboard:', error);
+    }
+  };
+
+  useEffect(() => {
+    const fetchStopwatchData = async () => {
+      try {
+        const response = await axios.get('https://todo-8.onrender.com/api/stopwatches/all', {
+          params: { username }
+        });
+        setStopwatches(response.data.stopwatches);
+        setTotalXP(response.data.totalMinutes);
+      } catch (error) {
+        console.error('Error fetching stopwatch data:', error);
+        setError('Unable to fetch stopwatch data. Please try again later.');
+      }
+    };
+
+    if (username) {
+      fetchStopwatchData();
+    }
+  }, [username]);
+
+  useEffect(() => {
+    if (username && totalXP > 0) {
+      updateLeaderboard(username, totalXP);
+    }
+  }, [username, totalXP]);
+
+  return (
+    <div className="profile-container">
+      <h1 className="profile-title">Profile</h1>
+      <h2 className="profile-welcome">Welcome, {username}!</h2>
+      {error && (
+        <p className="profile-error">{error}</p>
+      )}
+      <div className="profile-content">
+        <div className="xp-info">
+          <p>Total XP Earned: 
+            <span className="xp-value"> {totalXP}</span>
+          </p>
+        </div>
+      
+        <div className="activity-details">
+          <h2 className="details-title">Activity Details</h2>
+          {stopwatches.length > 0 ? (
+            <ul className="stopwatch-list">
+              {stopwatches.map(stopwatch => (
+                <li key={stopwatch._id} className="stopwatch-item">
+                  <h3 className="activity-name">{stopwatch.activityName}</h3>
+                  <p className="xp-earned">XP Earned: {stopwatch.minutes}</p>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p className="no-data">No stopwatch data available.</p>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default Profile;
