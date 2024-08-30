@@ -33,17 +33,23 @@ const Dashboard = () => {
   };
 
   return (
-    <div className="min-h-screen bg-custom p-10 relative">
-      {/* Container for the snake and the box */}
+    <div className="dashboard-container">
+      {/* Container for the rules and image */}
       <div className="box-container">
         <div className="rules-box">
-          <h2 className="text-3xl font-bold text-gray-800 mb-4">Activity Tracker Rules</h2>
-          <ul className="list-disc list-inside text-lg text-gray-700">
+          <h2 className="rules-heading">Activity Tracker Rules</h2>
+          <ul className="rules-list">
             <li>1 XP for every minute of activity per day.</li>
             <li>Accumulate XP based on the time spent each day.</li>
             <li>Your avatar will level up as you gain more XP.</li>
             <li>Keep track of your progress and challenge yourself!</li>
           </ul>
+        </div>
+
+
+         {/* Add an image to the right */}
+         <div className="image-container">
+          <img src="https://p0.pikist.com/photos/601/40/abstract-action-activity-art-background-beach-beautiful-black-blurred.jpg" alt="Tracker Image" className="tracker-image" />
         </div>
 
         <div className="snake-container">
@@ -54,11 +60,11 @@ const Dashboard = () => {
       </div>
 
       {/* Activity Form */}
-      <div className="bg-white p-6 rounded-lg shadow-lg mt-8">
-        <h2 className="text-3xl font-bold text-gray-800 mb-6">Add New Activity</h2>
-        <form onSubmit={handleSubmit} className="space-y-6">
-          <div>
-            <label htmlFor="activityName" className="block text-gray-700 text-lg font-bold mb-2">Activity</label>
+      <div className="activity-form">
+        <h2 className="form-heading">Add New Activity</h2>
+        <form onSubmit={handleSubmit}>
+          <div className="form-group">
+            <label htmlFor="activityName" className="form-label">Activity</label>
             <input
               type="text"
               id="activityName"
@@ -66,13 +72,13 @@ const Dashboard = () => {
               value={activityName}
               onChange={(e) => setActivityName(e.target.value)}
               placeholder="Enter your activity"
-              className="w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              className="form-input"
               required
             />
           </div>
 
-          <div>
-            <label htmlFor="totalDays" className="block text-gray-700 text-lg font-bold mb-2">Total Days</label>
+          <div className="form-group">
+            <label htmlFor="totalDays" className="form-label">Total Days</label>
             <input
               type="number"
               id="totalDays"
@@ -80,21 +86,21 @@ const Dashboard = () => {
               value={totalDays}
               onChange={(e) => setTotalDays(e.target.value)}
               placeholder="Enter total days"
-              className="w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              className="form-input"
               required
             />
           </div>
 
           <button
             type="submit"
-            className="w-full bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 transition duration-300"
+            className="form-button"
           >
             Add Activity
           </button>
         </form>
 
         {successMessage && (
-          <p className="text-green-500 mt-4 text-center">{successMessage}</p>
+          <p className="success-message">{successMessage}</p>
         )}
       </div>
     </div>
@@ -102,3 +108,4 @@ const Dashboard = () => {
 };
 
 export default Dashboard;
+
