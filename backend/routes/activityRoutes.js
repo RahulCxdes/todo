@@ -1,7 +1,7 @@
 const express = require('express');
 const Activity = require('../models/Activity');
-const Settings = require('../models/Settings');
 const router = express.Router();
+
 
 // POST route to add new activity
 router.post('/add-activity', async (req, res) => {
@@ -16,7 +16,8 @@ router.post('/add-activity', async (req, res) => {
       activityName,
       totalDays,
       username,
-      day: 1  // Initialize with day 1
+      day: 1,
+      lastActivityDate: new Date(), // Set current date as the initial last activity date
     });
 
     const savedActivity = await newActivity.save();
@@ -41,15 +42,25 @@ router.get('/activities', async (req, res) => {
 
     const now = new Date();
 
-    // Iterate over each activity to update its day based on the last update
+    // Iterate over each activity to update its day and streak based on the last update
     for (const activity of activities) {
-      const lastUpdate = activity.lastUpdate;
-      const dayDiff = Math.floor((now - lastUpdate) / (1000 * 60 * 60 * 24));  // Calculate the difference in days
+      const lastUpdate = activity.lastActivityDate || now;
+      const dayDiff = Math.floor((now - new Date(lastUpdate)) / (1000 * 60 * 60 * 24));  // Calculate the difference in days
 
-      if (dayDiff > 0 && activity.day < activity.totalDays) {
-        // If days have passed and activity's day is less than totalDays
-        activity.day = Math.min(activity.day + dayDiff, activity.totalDays);  // Increment the day, but don't exceed totalDays
-        activity.lastUpdate = now;  // Update the lastUpdate to the current time
+      if (dayDiff > 0) {
+        // Update activity day
+        activity.day = Math.min(activity.day + dayDiff, activity.totalDays);
+
+        // Update streak
+        if (dayDiff > 1) {
+          activity.streakCount = 0;  // Reset streak if more than 1 day has passed
+        } else {
+          activity.streakCount = (activity.streakCount || 0) + 1; // Increment the streak
+        }
+
+        // Update the last activity date to the current time
+        activity.lastActivityDate = now;
+
         await activity.save();  // Save the updated activity
       }
     }
@@ -60,9 +71,6 @@ router.get('/activities', async (req, res) => {
     res.status(500).json({ message: 'Error fetching activities and updating days', error });
   }
 });
-
-
-
 // DELETE route to remove an activity
 router.delete('/:id', async (req, res) => {
   try {
@@ -86,55 +94,3 @@ router.delete('/:id', async (req, res) => {
 });
 
 module.exports = router;
-
-
-
-
-// // routes/activityRoutes.js
-
-// const express = require('express');
-// const Activity = require('../models/Activity');
-// const router = express.Router();
-
-// // POST route to add new activity
-// router.post('/add-activity', async (req, res) => {
-//   try {
-//     const { activityName, totalDays, username } = req.body; // Include username
-
-//     if (!activityName || !totalDays || !username) { // Check for username
-//       return res.status(400).json({ message: 'All fields are required' });
-//     }
-
-//     const newActivity = new Activity({
-//       activityName,
-//       totalDays,
-//       username // Save username
-//     });
-
-//     const savedActivity = await newActivity.save();
-//     res.status(201).json(savedActivity);
-//   } catch (error) {
-//     console.error('Error saving activity:', error);
-//     res.status(500).json({ message: 'Error saving activity', error });
-//   }
-// });
-
-
-// // Route to get activities for a specific user
-// router.get('/activities', async (req, res) => {
-//   try {
-//     // Assume the username is provided in the query parameters
-//     const username = req.query.username;
-
-//     if (!username) {
-//       return res.status(400).json({ message: 'Username is required' });
-//     }
-
-//     const activities = await Activity.find({ username }); // Filter by username
-//     res.status(200).json(activities);
-//   } catch (error) {
-//     res.status(500).json({ error: 'Error fetching activities' });
-//   }
-// });
-
-// module.exports = router;
