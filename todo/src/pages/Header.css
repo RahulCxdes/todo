@@ -1,183 +1,99 @@
-/* Sidebar container */
-.sidebar {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 250px;
-    height: 100%;
-    background-color: #333;
-    color: #fff;
-    transform: translateX(-100%);
-    transition: transform 0.3s ease;
-    z-index: 1000;
-    padding-top: 60px;
-    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.3);
-  }
-  
-  /* Open sidebar */
-  .sidebar.open {
-    transform: translateX(0);
-  }
-  
-  /* Sidebar close button */
-  .sidebar-close {
-    position: absolute;
-    top: 15px;
-    right: 15px;
-    background: none;
-    border: none;
-    font-size: 30px;
-    color: #fff;
-    cursor: pointer;
-  }
-  
-  /* Sidebar title */
-  .sidebar-title {
-    text-align: center;
-    font-size: 24px;
-    margin-bottom: 20px;
-  }
-  
-  /* Sidebar welcome message */
-  .sidebar-welcome {
-    display: block;
-    text-align: center;
-    font-size: 18px;
-    margin: 20px 0;
-  }
-  
-  /* Sidebar nav items */
-  .sidebar-nav {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-  
-  .sidebar-link {
-    color: #fff;
-    text-decoration: none;
-    padding: 10px 20px;
-    font-size: 18px;
-  }
-  
-  .sidebar-link:hover {
-    background-color: #555;
-    border-radius: 5px;
-  }
-  
-  .sidebar-button {
-    background-color: #f44336;
-    border: none;
-    color: #fff;
-    padding: 10px 20px;
-    font-size: 18px;
-    border-radius: 5px;
-    cursor: pointer;
-    margin-top: 10px;
-  }
-  
-  .sidebar-button:hover {
-    background-color: #d32f2f;
-  }
-  
-  /* Overlay styles */
-  .sidebar-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.5);
-    z-index: 900;
-  }
-  
-  /* Header styles */
-  .header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background-color: #333;
-    color: #fff;
-    padding: 10px 20px;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    z-index: 1000;
-  }
-  
-  /* Header nav links */
-  .header-nav {
-    display: flex;
-    gap: 15px;
-  }
-  
-  .header-link {
-    color: #fff;
-    text-decoration: none;
-    padding: 10px;
-  }
-  
-  .header-link:hover {
-    background-color: #555;
-    border-radius: 5px;
-  }
-  
-  .header-button {
-    background-color: #f44336;
-    border: none;
-    color: #fff;
-    padding: 10px;
-    font-size: 18px;
-    border-radius: 5px;
-    cursor: pointer;
-  }
-  
-  .header-button:hover {
-    background-color: #d32f2f;
-  }
-  
-  /* Sidebar toggle button */
-  .sidebar-toggle {
-    display: none;
-    position: fixed;
-    top: 10px;
-    left: 10px;
-    background: none;
-    border: none;
-    font-size: 35px;
-    color: #fff;
-    cursor: pointer;
-    z-index: 1100; /* Ensure it's above other elements */
-  }
-  
-  /* Hide header on mobile view and show sidebar */
-  @media (max-width: 768px) {
-    .header {
-      display: none;
+import React, { useState, useRef, useEffect, useContext } from 'react';
+import { Link } from 'react-router-dom';
+import { AuthContext } from '../App';
+
+import './Header.css';
+
+const Header = () => {
+  const { isLoggedIn, logout, username } = useContext(AuthContext);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const sidebarRef = useRef(null);
+  const overlayRef = useRef(null);
+
+  const toggleSidebar = () => {
+    setIsSidebarOpen(!isSidebarOpen);
+  };
+
+  const handleClickOutside = (event) => {
+    if (sidebarRef.current && overlayRef.current) {
+      if (
+        !sidebarRef.current.contains(event.target) &&
+        !overlayRef.current.contains(event.target)
+      ) {
+        setIsSidebarOpen(false);
+      }
     }
-  
-    .sidebar {
-      display: block;
-    }
-  
-    .sidebar-toggle {
-      display: block;
-    }
-  }
-  
-  /* Show header and hide sidebar on larger screens */
-  @media (min-width: 769px) {
-    .sidebar {
-      display: none;
-    }
-  
-    .sidebar-toggle {
-      display: none;
-    }
-  
-    .header {
-      display: flex;
-    }
-  }
-  
+  };
+
+  useEffect(() => {
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
+  return (
+    <>
+      <button className="sidebar-toggle" onClick={toggleSidebar}>
+        ☰
+      </button>
+
+      <div
+        className={`sidebar ${isSidebarOpen ? 'open' : ''}`}
+        ref={sidebarRef}
+      >
+        <button className="sidebar-close" onClick={toggleSidebar}>
+          ✕
+        </button>
+        <h1 className="sidebar-title">SelfBuilder</h1>
+        <nav className="sidebar-nav">
+          {isLoggedIn ? (
+            <>
+              <span className="sidebar-welcome">Welcome, {username}!</span>
+              <Link to="/dashboard" className="sidebar-link">Dashboard</Link>
+              <Link to="/activities" className="sidebar-link">Activities</Link>
+              <Link to="/profile" className="sidebar-link">Profile</Link>
+              <Link to="/leader" className="sidebar-link">Leaderboard</Link>
+              <Link to="/connect" className="sidebar-link">Connect</Link>
+              <Link to="/bot" className="sidebar-link">bot</Link>
+              {/* <Link to="/look" className="sidebar-link">Look</Link> Add Look link */}
+              <button className="sidebar-button" onClick={logout}>Logout</button>
+            </>
+          ) : (
+            <>
+              <Link to="/login" className="sidebar-link">Login</Link>
+              <Link to="/register" className="sidebar-link">Register</Link>
+            </>
+          )}
+        </nav>
+      </div>
+
+      {isSidebarOpen && <div className="sidebar-overlay" ref={overlayRef}></div>}
+
+      <header className="header">
+        <h1 className="header-title">SelfBuilder</h1>
+        <nav className="header-nav">
+          {isLoggedIn ? (
+            <>
+              <Link to="/dashboard" className="header-link">Dashboard</Link>
+              <Link to="/activities" className="header-link">Activities</Link>
+              <Link to="/profile" className="header-link">Profile</Link>
+              <Link to="/leader" className="header-link">Leaderboard</Link>
+              <Link to="/connect" className="header-link">Connect</Link>
+              <Link to="/bot" className="sidebar-link">bot</Link>
+              {/* <Link to="/look" className="header-link">Look</Link> Add Look link */}
+              <button className="header-button" onClick={logout}>Logout</button>
+            </>
+          ) : (
+            <>
+              <Link to="/login" className="header-link">Login</Link>
+              <Link to="/register" className="header-link">Register</Link>
+            </>
+          )}
+        </nav>
+      </header>
+    </>
+  );
+};
+
+export default Header;
