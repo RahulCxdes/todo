@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
-import Stopwatch from './Stopwatch';
 import { AuthContext } from '../App';
 import { useNavigate } from 'react-router-dom';
+import Stopwatch from './Stopwatch';
 
 const ActivityProgress = () => {
   const [activities, setActivities] = useState([]);
@@ -16,17 +16,17 @@ const ActivityProgress = () => {
 
     const fetchActivities = async () => {
       try {
-        const response = await axios.get('https://todo-8.onrender.com/api/activities/activities', {
+        const response = await axios.get('https://todo-activity-3vta.onrender.com/api/activities/activities', {
           params: { username },
         });
         const updatedActivities = response.data.map(activity => ({
           ...activity,
-          day: activity.day <= activity.totalDays ? activity.day : activity.totalDays,
+          day: Math.min(activity.day, activity.totalDays),
         }));
         setActivities(updatedActivities);
-        setLoading(false);
       } catch (error) {
         setError(error.response?.data?.message || 'An unexpected error occurred');
+      } finally {
         setLoading(false);
       }
     };
@@ -35,10 +35,13 @@ const ActivityProgress = () => {
   }, [isLoggedIn, username]);
 
   const calculateProgress = (activity) => {
-    const totalDays = activity.totalDays;
-    const daysElapsed = activity.day;
-    const progressPercentage = Math.min(100, Math.round((daysElapsed / totalDays) * 100));
+    const progressPercentage = Math.min(100, Math.round((activity.day / activity.totalDays) * 100));
     return progressPercentage;
+  };
+
+  const handleGetInfo = (activityName) => {
+    // Navigate to the ActivityInfo page with the activityName as a route parameter
+    navigate(`/activity-info/${activityName}`);
   };
 
   const handleStopwatchStop = (activityId, time) => {
@@ -47,65 +50,94 @@ const ActivityProgress = () => {
 
   const handleDelete = async (activityId) => {
     try {
-      await axios.delete(`https://todo-8.onrender.com/api/activities/${activityId}`);
+      await axios.delete(`https://todo-activity-3vta.onrender.com/api/activities/${activityId}`);
       setActivities(activities.filter(activity => activity._id !== activityId));
     } catch (error) {
       console.error('Error deleting activity:', error);
+      setError('Failed to delete the activity. Please try again.');
     }
   };
 
-  const handleRedo = (activityId) => {
-    navigate('/dashboard');
+  const handleRedo = () => {
+    // Optionally, handle redo logic here
   };
 
-  const isTerminated = (activity) => {
-    return activity.day >= activity.totalDays;
-  };
+  const isTerminated = (activity) => activity.day >= activity.totalDays;
 
   if (loading) return <p className="text-center text-gray-600">Loading...</p>;
   if (error) return <p className="text-center text-red-600">{error}</p>;
 
   return (
-    <div className="min-h-screen bg-gradient-to-r from-purple-400 to-pink-500 p-8">
-      <h2 className="text-4xl font-bold text-white mb-6 text-center">Your Activities</h2>
-      <div className="text-center text-xl font-semibold mb-6 text-white">Username: {username}</div>
-      <div className="space-y-6">
+    <div className="min-h-screen bg-gradient-to-r from-purple-500 via-pink-500 to-red-500 p-8">
+      <h2 className="text-4xl font-extrabold text-white mb-8 text-center">Your Activities</h2>
+      <div className="text-center text-xl font-semibold text-white mb-8">Username: {username}</div>
+      <div className="space-y-8 max-w-5xl mx-auto">
         {activities.length > 0 ? (
-          activities.map((activity) => (
-            <div
-              key={activity._id}
-              className={`p-6 rounded-lg shadow-lg transform transition-transform ${
-                isTerminated(activity) ? 'border-4 border-yellow-500 scale-105 bg-gradient-to-r from-yellow-100 to-yellow-300' : 'border-4 border-green-500 bg-white'
-              }`}
-            >
-              <h3 className="text-2xl font-bold text-gray-800 mb-4">{activity.activityName}</h3>
-              <p className="text-lg text-gray-600 mb-2">Total Days: {activity.totalDays}</p>
-              <p className="text-lg text-gray-600 mb-2">Current Day: {activity.day}</p>
-              {isTerminated(activity) ? (
-                <>
-                  <p className="text-green-600 font-bold text-xl">Congratulations! Activity Completed</p>
-                  <button className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-lg mr-2" onClick={() => handleRedo(activity._id)}>
-                    Redo
-                  </button>
-                  <button className="bg-red-600 hover:bg-red-700 text-white py-2 px-4 rounded-lg" onClick={() => handleDelete(activity._id)}>
-                    Delete
-                  </button>
-                </>
-              ) : (
-                <Stopwatch activityId={activity._id} onStop={(time) => handleStopwatchStop(activity._id, time)} />
-              )}
-              <div className="relative w-full bg-gray-300 rounded-full h-6 mb-4 overflow-hidden">
-                <div
-                  className="absolute left-0 top-0 bg-green-500 h-full text-xs text-white text-center leading-6"
-                  style={{ width: `${calculateProgress(activity)}%` }}
-                >
-                  {calculateProgress(activity)}%
+          activities.map((activity) => {
+            const progressPercentage = calculateProgress(activity);
+            const isActivityTerminated = isTerminated(activity);
+            const streakCount = activity.streakCount || 0; // Display streak count
+            const lastActivityDate = activity.lastActivityDate
+              ? new Date(activity.lastActivityDate).toLocaleDateString()
+              : 'N/A'; // Format lastActivityDate
+
+            return (
+              <div
+                key={activity._id}
+                className={`p-6 rounded-xl shadow-lg transition-all transform hover:scale-105 bg-gradient-to-r from-yellow-400 to-green-300 border-green-300`}
+              >
+                <div className="flex items-center justify-between mb-4">
+                  <h3 className="text-2xl font-bold text-white">{activity.activityName}</h3>
+                  <div className="flex items-center space-x-4">
+                    <button
+                      className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-lg"
+                      onClick={() => handleGetInfo(activity.activityName)}
+                    >
+                      Get Info
+                    </button>
+                    {isActivityTerminated && (
+                      <>
+                        <button
+                          className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-lg"
+                          onClick={handleRedo}
+                        >
+                          Redo
+                        </button>
+                        <button
+                          className="bg-red-600 hover:bg-red-700 text-white py-2 px-4 rounded-lg"
+                          onClick={() => handleDelete(activity._id)}
+                        >
+                          Delete
+                        </button>
+                      </>
+                    )}
+                  </div>
+                </div>
+                <div className="text-lg text-white">
+                  <p className="mb-1">Total Days: {activity.totalDays}</p>
+                  <p className="mb-1">Current Day: {activity.day}</p>
+                  <p className="mb-1">Streak Count: {streakCount}</p> {/* Display streak count */}
+                  <p className="mb-1">Last Activity Date: {lastActivityDate}</p> {/* Display last activity date */}
+                </div>
+                {!isActivityTerminated && (
+                  <Stopwatch
+                    activityId={activity._id}
+                    onStop={(time) => handleStopwatchStop(activity._id, time)}
+                  />
+                )}
+                <div className="relative w-full bg-gray-300 rounded-full h-6 mt-4 overflow-hidden">
+                  <div
+                    className="absolute left-0 top-0 bg-green-600 h-full text-xs text-white text-center leading-6"
+                    style={{ width: `${progressPercentage}%` }}
+                  >
+                    {progressPercentage}%
+                  </div>
                 </div>
               </div>
-            </div>
-          ))
+            );
+          })
         ) : (
-          <p className="text-center text-gray-100">No activities found. Add activities to get started!</p>
+          <p className="text-center text-white text-lg">No activities found. Add activities to get started!</p>
         )}
       </div>
     </div>
