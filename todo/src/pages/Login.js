@@ -14,56 +14,57 @@ const Login = () => {
     e.preventDefault();
   
     try {
-      const res = await axios.post('https://todo-8.onrender.com/api/users/login', { email, password });
+      const res = await axios.post('https://todo-activity-3vta.onrender.com/api/users/login', { email, password });
       console.log('Response:', res.data); // Log the response for debugging
   
       if (res.data.message === 'Login successful!') {
-        // Assuming res.data.user contains the username
-        login(res.data.user.username);  // Update login state with username
-        navigate('/profile');  // Redirect to Profile page
+        login(res.data.user.username); // Update login state with username
+        navigate('/profile'); // Redirect to Profile page
       } else {
         setMessage(res.data.message || 'Login failed. Please check your credentials.');
       }
     } catch (error) {
-      // Log error details
-      console.error('Login error:', error);
-      console.error('Error response data:', error.response?.data);
-      console.error('Error response status:', error.response?.status);
-      console.error('Error response headers:', error.response?.headers);
+      console.error('Login error:', error.message);
       setMessage('Error logging in. Please try again.');
     }
   };
   
   return (
-    <div className="flex justify-center items-center h-screen">
-      <div className="w-96 p-6 bg-white rounded-md shadow-md">
-        <h1 className="text-xl font-bold mb-6">Login</h1>
-        <form onSubmit={handleSubmit}>
-          <div className="mb-4">
-            <label className="block text-sm mb-2">Email:</label>
+    <div className="flex justify-center items-center h-screen bg-gradient-to-r from-blue-500 to-purple-600">
+      <div className="w-full max-w-md p-8 space-y-8 bg-white rounded-lg shadow-lg">
+        <h1 className="text-3xl font-bold text-center text-gray-800">Login</h1>
+        <form onSubmit={handleSubmit} className="space-y-6">
+          <div className="relative">
+            <label className="block text-sm font-medium text-gray-600">Email</label>
             <input
               type="email"
-              className="w-full px-3 py-2 border rounded-md"
+              className="w-full px-4 py-2 mt-2 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:border-blue-300"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
             />
           </div>
-          <div className="mb-4">
-            <label className="block text-sm mb-2">Password:</label>
+          <div className="relative">
+            <label className="block text-sm font-medium text-gray-600">Password</label>
             <input
               type="password"
-              className="w-full px-3 py-2 border rounded-md"
+              className="w-full px-4 py-2 mt-2 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:border-blue-300"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
             />
           </div>
-          <button type="submit" className="w-full bg-blue-500 text-white py-2 rounded-md">
+          <button
+            type="submit"
+            className="w-full px-4 py-2 font-bold text-white bg-blue-600 rounded-lg hover:bg-blue-700 focus:ring focus:ring-blue-300"
+          >
             Login
           </button>
-          {message && <p className="mt-4 text-red-500">{message}</p>}
+          {message && <p className="mt-4 text-center text-red-600">{message}</p>}
         </form>
+        <p className="text-center text-sm text-gray-600">
+          Don't have an account? <a href="/register" className="text-blue-500 hover:underline">Sign up</a>
+        </p>
       </div>
     </div>
   );
