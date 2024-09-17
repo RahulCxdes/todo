@@ -20,7 +20,7 @@ const Register = () => {
     e.preventDefault();
   
     try {
-      const response = await fetch('https://todo-8.onrender.com/api/users/register', {
+      const response = await fetch('https://todo-activity-3vta.onrender.com/api/users/register', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -34,7 +34,7 @@ const Register = () => {
       if (contentType && contentType.includes('application/json')) {
         const data = await response.json();
         if (response.ok) {
-          navigate('/dashboard');
+          navigate('/login');
         } else {
           console.error('Error response data:', data);
           alert(data.message || 'An unexpected error occurred');
@@ -49,18 +49,17 @@ const Register = () => {
       alert('Error registering user');
     }
   };
-  
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-blue-500 to-indigo-600">
+    <div className=" lg:mt-10 min-h-screen flex items-center justify-center bg-gradient-to-r from-blue-500 to-purple-600">
       <div className="bg-white shadow-lg rounded-lg p-8 max-w-md w-full">
         <h2 className="text-3xl font-bold text-center mb-6 text-gray-800">Create an Account</h2>
         
         {error && <p className="text-red-600 text-center mb-4">{error}</p>}
 
-        <form onSubmit={handleSubmit}>
-          <div className="mb-4">
-            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="username">
+        <form onSubmit={handleSubmit} className="space-y-6">
+          <div>
+            <label className="block text-sm font-bold text-gray-700" htmlFor="username">
               Username
             </label>
             <input
@@ -69,13 +68,13 @@ const Register = () => {
               placeholder="Enter your username"
               value={formData.username}
               onChange={handleChange}
-              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              className="w-full px-4 py-2 mt-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
               required
             />
           </div>
 
-          <div className="mb-4">
-            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="email">
+          <div>
+            <label className="block text-sm font-bold text-gray-700" htmlFor="email">
               Email
             </label>
             <input
@@ -84,13 +83,13 @@ const Register = () => {
               placeholder="Enter your email"
               value={formData.email}
               onChange={handleChange}
-              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              className="w-full px-4 py-2 mt-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
               required
             />
           </div>
 
-          <div className="mb-4">
-            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="password">
+          <div>
+            <label className="block text-sm font-bold text-gray-700" htmlFor="password">
               Password
             </label>
             <input
@@ -99,13 +98,13 @@ const Register = () => {
               placeholder="Enter your password"
               value={formData.password}
               onChange={handleChange}
-              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              className="w-full px-4 py-2 mt-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
               required
             />
           </div>
 
-          <div className="mb-4">
-            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="age">
+          <div>
+            <label className="block text-sm font-bold text-gray-700" htmlFor="age">
               Age
             </label>
             <input
@@ -114,20 +113,20 @@ const Register = () => {
               placeholder="Enter your age"
               value={formData.age}
               onChange={handleChange}
-              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              className="w-full px-4 py-2 mt-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
               required
             />
           </div>
 
-          <div className="mb-6">
-            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="gender">
+          <div>
+            <label className="block text-sm font-bold text-gray-700" htmlFor="gender">
               Gender
             </label>
             <select
               name="gender"
               value={formData.gender}
               onChange={handleChange}
-              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              className="w-full px-4 py-2 mt-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
               required
             >
               <option value="" disabled>Select Gender</option>
@@ -139,7 +138,7 @@ const Register = () => {
 
           <button
             type="submit"
-            className="w-full bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 transition duration-300"
+            className="w-full bg-indigo-500 text-white py-2 px-4 rounded-md hover:bg-indigo-600 transition duration-300"
           >
             Register
           </button>
