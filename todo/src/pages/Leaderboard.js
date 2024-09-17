@@ -8,7 +8,7 @@ const Leaderboard = () => {
   useEffect(() => {
     const fetchLeaderboardData = async () => {
       try {
-        const response = await axios.get('https://todo-8.onrender.com/api/leaderboard/all');
+        const response = await axios.get('https://todo-activity-3vta.onrender.com/api/leaderboard/all');
         setLeaderboardData(response.data);
       } catch (error) {
         console.error('Error fetching leaderboard data:', error);
