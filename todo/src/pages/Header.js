@@ -1,7 +1,8 @@
 import React, { useState, useRef, useEffect, useContext } from 'react';
 import { Link } from 'react-router-dom';
 import { AuthContext } from '../App';
-import './Header.css'; // Import the CSS file
+
+import './Header.css';
 
 const Header = () => {
   const { isLoggedIn, logout, username } = useContext(AuthContext);
@@ -33,12 +34,10 @@ const Header = () => {
 
   return (
     <>
-      {/* Toggle button for mobile view */}
       <button className="sidebar-toggle" onClick={toggleSidebar}>
         ☰
       </button>
 
-      {/* Sidebar */}
       <div
         className={`sidebar ${isSidebarOpen ? 'open' : ''}`}
         ref={sidebarRef}
@@ -55,6 +54,9 @@ const Header = () => {
               <Link to="/activities" className="sidebar-link">Activities</Link>
               <Link to="/profile" className="sidebar-link">Profile</Link>
               <Link to="/leader" className="sidebar-link">Leaderboard</Link>
+              <Link to="/connect" className="sidebar-link">Connect</Link>
+              <Link to="/bot" className="sidebar-link">bot</Link>
+              {/* <Link to="/look" className="sidebar-link">Look</Link> Add Look link */}
               <button className="sidebar-button" onClick={logout}>Logout</button>
             </>
           ) : (
@@ -65,11 +67,9 @@ const Header = () => {
           )}
         </nav>
       </div>
-      
-      {/* Overlay */}
+
       {isSidebarOpen && <div className="sidebar-overlay" ref={overlayRef}></div>}
 
-      {/* Header */}
       <header className="header">
         <h1 className="header-title">SelfBuilder</h1>
         <nav className="header-nav">
@@ -79,6 +79,9 @@ const Header = () => {
               <Link to="/activities" className="header-link">Activities</Link>
               <Link to="/profile" className="header-link">Profile</Link>
               <Link to="/leader" className="header-link">Leaderboard</Link>
+              <Link to="/connect" className="header-link">Connect</Link>
+              <Link to="/bot" className="sidebar-link">bot</Link>
+              {/* <Link to="/look" className="header-link">Look</Link> Add Look link */}
               <button className="header-button" onClick={logout}>Logout</button>
             </>
           ) : (
