@@ -1,11 +1,14 @@
 const mongoose = require('mongoose');
 
 const activitySchema = new mongoose.Schema({
-  activityName: { type: String, required: true },
-  totalDays: { type: Number, required: true },
-  username: { type: String, required: true },
-  day: { type: Number, default: 1 }, // The current day of the activity
-  lastUpdate: { type: Date, default: Date.now }, // Last time this activity was updated
+  activityName: String,
+  totalDays: Number,
+  day: { type: Number, default: 1 },
+  email: String, // Store the user's email
+  username: String, // Store the user's username
+  streakCount: { type: Number, default: 0 }, // Add streak count
+  lastActivityDate: { type: Date, default: null } // Track the last activity completion date
 });
 
-module.exports = mongoose.model('Activity', activitySchema);
+const Activity = mongoose.model('Activity', activitySchema);
+module.exports = Activity;
